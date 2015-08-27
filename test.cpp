@@ -6,9 +6,10 @@
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
-#include "mockable.hpp"
-#include "mock_base.hpp"
-#include "detail/thread/once_block.hpp"
+#include "mock.hpp"
+
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 namespace
 {
@@ -17,20 +18,17 @@ namespace
         void SomeMethod(int a, double b, float c) const
         {
             NVM_MOCK_NONVIRTUAL_INTERCEPT(SomeTypeInheritsMockable::SomeMethod, a, b, c);
-            TRACE("Called SomeMethod");
         }
 
         int SomeMethod2()
         {
             NVM_MOCK_NONVIRTUAL_INTERCEPT(SomeTypeInheritsMockable::SomeMethod2);
-            TRACE("Called SomeMethod2");
             return -1;
         }
 
         int SomeMethod3()
         {
             NVM_MOCK_NONVIRTUAL_INTERCEPT(SomeTypeInheritsMockable::SomeMethod3);
-            TRACE("Called SomeMethod3");
             return -2;
         }
     };
@@ -38,8 +36,7 @@ namespace
     struct MockSomeTypeInheritsMockable : nvm::mock < SomeTypeInheritsMockable >
     {
         MockSomeTypeInheritsMockable()
-            : MockMethodCalled(false)
-            , IsMockedCalled(false)
+            : IsMockedCalled(false)
         {
             NVM_ONCE_BLOCK()
             {
@@ -49,22 +46,16 @@ namespace
             }
         }
 
-        void SomeMethod(int a, double b, float c) const
-        {
-            TRACE("Called MockSomeMethod");
-            MockMethodCalled = true;
-        }
-
+        MOCK_CONST_METHOD3(SomeMethod, void(int a, double b, float c));
         MOCK_METHOD0(SomeMethod2, int());
         MOCK_METHOD0(SomeMethod3, int());
 
-        virtual bool IsMocked() const
+        virtual bool is_mocked() const
         {
             IsMockedCalled = true;
             return true;
         }
 
-        mutable bool MockMethodCalled;
         mutable bool IsMockedCalled;
     };
 
@@ -87,12 +78,12 @@ namespace
     {
         using namespace ::testing;
         MockSomeTypeInheritsMockable mst;
+		EXPECT_CALL(mst, SomeMethod(_,_,_));
         CallSomeMethod(mst);
-        EXPECT_TRUE(mst.MockMethodCalled);
         EXPECT_TRUE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
         EXPECT_CALL(mst, SomeMethod2()).Times(1);
-        EXPECT_EQ(CallSomeMethod2(mst), 42);
+        EXPECT_EQ(42, CallSomeMethod2(mst));
 
         //! Methods with the same signature but different names should work.
         EXPECT_CALL(mst, SomeMethod3()).WillRepeatedly(Return(24));
@@ -109,13 +100,11 @@ namespace
         void SomeMethod(int a, double b, float c)
         {
             NVM_MOCK_NONVIRTUAL_INTERCEPT(SomeTypeImplementsMockable::SomeMethod, a, b, c);
-            TRACE("Called SomeMethod");
         }
 
         int SomeMethod2()
         {
             NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG(SomeTypeImplementsMockable::SomeMethod2, int());
-            TRACE("Called SomeMethod2");
             return -1;
         }
     };
@@ -123,8 +112,7 @@ namespace
     struct MockSomeTypeImplementsMockable : nvm::mock < SomeTypeImplementsMockable >
     {
         MockSomeTypeImplementsMockable()
-            : MockMethodCalled(false)
-            , IsMockedCalled(false)
+            : IsMockedCalled(false)
         {        
             NVM_ONCE_BLOCK()
             {
@@ -133,21 +121,15 @@ namespace
             }
         }
 
-        void SomeMethod(int a, double b, float c)
-        {
-            TRACE("Called MockSomeMethod");
-            MockMethodCalled = true;
-        }
-
+        MOCK_CONST_METHOD3(SomeMethod, void(int a, double b, float c));
         MOCK_METHOD0(SomeMethod2, int());
 
-        virtual bool IsMocked() const
+        virtual bool is_mocked() const
         {
             IsMockedCalled = true;
             return true;
         }
 
-        bool MockMethodCalled;
         mutable bool IsMockedCalled;
     };
 
@@ -165,11 +147,11 @@ namespace
     {
         using namespace ::testing;
         MockSomeTypeImplementsMockable mst;
+		EXPECT_CALL(mst, SomeMethod(_,_,_));
         CallSomeMethod(mst);
-        EXPECT_TRUE(mst.MockMethodCalled);
         EXPECT_FALSE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
-        EXPECT_CALL(mst, SomeMethod2()).Times(1);
+        EXPECT_CALL(mst, SomeMethod2());
         EXPECT_EQ(CallSomeMethod2(mst), 42);
     }
 
@@ -179,13 +161,11 @@ namespace
         void SomeMethod(int a, double b, float c) const
         {
             NVM_MOCK_NONVIRTUAL_INTERCEPT(AnotherTypeInheritsMockable::SomeMethod, a, b, c);
-            TRACE("Called AnotherTypeInheritsMockable::SomeMethod");
         }
 
         int SomeMethod2()
         {
             NVM_MOCK_NONVIRTUAL_INTERCEPT(AnotherTypeInheritsMockable::SomeMethod2);
-            TRACE("Called AnotherTypeInheritsMockable::SomeMethod2");
             return -1;
         }
     };
@@ -193,8 +173,7 @@ namespace
     struct MockAnotherTypeInheritsMockable : nvm::mock < AnotherTypeInheritsMockable >
     {
         MockAnotherTypeInheritsMockable()
-            : MockMethodCalled(false)
-            , IsMockedCalled(false)
+            : IsMockedCalled(false)
         {
             NVM_ONCE_BLOCK()
             {
@@ -203,15 +182,10 @@ namespace
             }
         }
 
-        void SomeMethod(int a, double b, float c) const
-        {
-            TRACE("Called AnotherTypeInheritsMockable::MockSomeMethod");
-            MockMethodCalled = true;
-        }
-
+        MOCK_CONST_METHOD3(SomeMethod, void(int a, double b, float c));
         MOCK_METHOD0(SomeMethod2, int());
 
-        virtual bool IsMocked() const
+        virtual bool is_mocked() const
         {
             IsMockedCalled = true;
             return true;
@@ -235,8 +209,8 @@ namespace
     {
         using namespace ::testing;
         MockAnotherTypeInheritsMockable mst;
+		EXPECT_CALL(mst, SomeMethod(_,_,_));
         CallSomeMethod(mst);
-        EXPECT_TRUE(mst.MockMethodCalled);
         EXPECT_TRUE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
         EXPECT_CALL(mst, SomeMethod2()).Times(1);
@@ -252,13 +226,11 @@ namespace
         void SomeMethod(int a, double b, float c)
         {
             NVM_MOCK_NONVIRTUAL_INTERCEPT(AnotherTypeImplementsMockable::SomeMethod, a, b, c);
-            TRACE("Called SomeMethod");
         }
 
         int SomeMethod2()
         {
             NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG(AnotherTypeImplementsMockable::SomeMethod2, int());
-            TRACE("Called SomeMethod2");
             return -1;
         }
     };
@@ -266,8 +238,7 @@ namespace
     struct MockAnotherTypeImplementsMockable : nvm::mock < AnotherTypeImplementsMockable >
     {
         MockAnotherTypeImplementsMockable()
-            : MockMethodCalled(false)
-            , IsMockedCalled(false)
+            : IsMockedCalled(false)
         {
             NVM_ONCE_BLOCK()
             {
@@ -276,15 +247,10 @@ namespace
             }
         }
 
-        void SomeMethod(int a, double b, float c)
-        {
-            TRACE("Called MockSomeMethod");
-            MockMethodCalled = true;
-        }
-
+        MOCK_CONST_METHOD3(SomeMethod, void(int a, double b, float c));
         MOCK_METHOD0(SomeMethod2, int());
 
-        virtual bool IsMocked() const
+        virtual bool is_mocked() const
         {
             IsMockedCalled = true;
             return true;
@@ -310,8 +276,8 @@ namespace
         //! NOTE, only the most derived class will be mocked for non-virtuals in this case.
 
         MockAnotherTypeImplementsMockable mst;
+		EXPECT_CALL(mst, SomeMethod(_,_,_));
         CallSomeMethod(mst);
-        EXPECT_TRUE(mst.MockMethodCalled);
         EXPECT_FALSE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
         EXPECT_CALL(mst, SomeMethod2()).Times(1);
@@ -327,20 +293,17 @@ namespace
         void SomeMethod(int a, double b, float c) const
         {
             NVM_MOCK_NONVIRTUAL_OVERLOAD_CONST_INTERCEPT(SomeTypeWithOverloadsInheritsMockable, SomeMethod, void(int, double, float), a, b, c);
-            TRACE("Called SomeMethod");
         }
 
         int SomeMethod()
         {
             NVM_MOCK_NONVIRTUAL_OVERLOAD_INTERCEPT(SomeTypeWithOverloadsInheritsMockable, SomeMethod, int());
-            TRACE("Called SomeMethod int()");
             return -1;
         }
 
         int SomeMethod2()
         {
             NVM_MOCK_NONVIRTUAL_OVERLOAD_INTERCEPT(SomeTypeWithOverloadsInheritsMockable, SomeMethod2, int());
-            TRACE("Called SomeMethod2 int()");
             return -1;
         }
     };
@@ -362,7 +325,7 @@ namespace
         MOCK_METHOD0(SomeMethod, int());
         MOCK_METHOD0(SomeMethod2, int());
 
-        virtual bool IsMocked() const
+        virtual bool is_mocked() const
         {
             IsMockedCalled = true;
             return true;
@@ -376,7 +339,7 @@ namespace
         return st.SomeMethod2();
     }
 
-    TEST(mockTests, TestmockingOverloads)
+    TEST(mockTests, TestMockingOverloads)
     {
         using namespace ::testing;
         
@@ -393,3 +356,9 @@ namespace
     }
 
 }//! anonymous
+
+int main(int argc, char** argv)
+{
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

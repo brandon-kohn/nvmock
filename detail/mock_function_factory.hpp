@@ -63,9 +63,8 @@ struct mock_function_factory<n>                                                 
     static boost::shared_ptr<boost::function_base> create(OriginalMFN opMFN, MockMFN mpMFN, T* pThis)\
     {                                                                                                \
         typedef signature_of_mem_fn<OriginalMFN>::type sig_type;                                     \
-        boost::shared_ptr<boost::function_base> pFn                                                  \
-        (new boost::function<sig_type>(                                                              \
-            boost::bind(mpMFN, pThis BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) NVM_ENUM_BIND_ARGS(BOOST_PP_DEC(n))))); \
+        boost::shared_ptr<boost::function_base> pFn = boost::make_shared<boost::function<sig_type> > \
+        (boost::bind(mpMFN, pThis BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) NVM_ENUM_BIND_ARGS(BOOST_PP_DEC(n)))); \
         return pFn;                                                                                  \
     }                                                                                                \
 };                                                                                                   \
@@ -79,7 +78,7 @@ struct mock_function_factory<n>                                                 
 
 #define BOOST_PP_LOCAL_MACRO(n)                                                      \
     template <typename R BOOST_PP_COMMA_IF(n) BOOST_PP_ENUM_PARAMS(n, typename Arg)> \
-    struct mem_fn_ptr_gen<R(BOOST_PP_ENUM_PARAMS(n, Arg))>                     \
+    struct mem_fn_ptr_gen<R(BOOST_PP_ENUM_PARAMS(n, Arg))>                           \
     {                                                                                \
         template <typename T>                                                        \
         struct apply                                                                 \
@@ -93,7 +92,7 @@ struct mock_function_factory<n>                                                 
     #define BOOST_PP_LOCAL_LIMITS (0, NVM_MAX_BIND_PLACEHOLDERS)
     #include BOOST_PP_LOCAL_ITERATE()
 
-}}//namespace nvm;
+}//namespace nvm;
 
 #undef NVM_BIND_ARG
 #undef NVM_ENUM_BIND_ARGS

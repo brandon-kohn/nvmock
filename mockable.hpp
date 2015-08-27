@@ -125,7 +125,7 @@ namespace nvm
     //! }
     //! \endcode
     #define NVM_MOCK_NONVIRTUAL_OVERLOAD_INTERCEPT(T, Method, Sig, ...)                  \
-        if (is_mocked())                                                                  \
+        if (is_mocked())                                                                 \
         {                                                                                \
             using namespace nvm;                                                         \
             boost::shared_ptr< boost::function<Sig> > pMockFn =                          \
@@ -135,7 +135,7 @@ namespace nvm
                     (                                                                    \
                         get_mock_mem_fn_key                                              \
                         (                                                                \
-                            mem_fn_ptr_gen<Sig>::template Apply<T>::type()               \
+                            mem_fn_ptr_gen<Sig>::template apply<T>::type()               \
                           , BOOST_PP_STRINGIZE(BOOST_PP_CAT(T, BOOST_PP_CAT(::, Method)))\
                         )                                                                \
                     )                                                                    \
@@ -163,7 +163,7 @@ namespace nvm
     //! }
     //! \endcode
     #define NVM_MOCK_NONVIRTUAL_OVERLOAD_CONST_INTERCEPT(T, Method, Sig, ...)            \
-        if (is_mocked())                                                                  \
+        if (is_mocked())                                                                 \
         {                                                                                \
             using namespace nvm;                                                         \
             boost::shared_ptr< boost::function<Sig> > pMockFn =                          \
@@ -173,7 +173,7 @@ namespace nvm
                     (                                                                    \
                         get_mock_mem_fn_key                                              \
                         (                                                                \
-                            mem_fn_ptr_gen<Sig>::template Apply<T>::const_type()         \
+                            mem_fn_ptr_gen<Sig>::template apply<T>::const_type()         \
                           , BOOST_PP_STRINGIZE(BOOST_PP_CAT(T, BOOST_PP_CAT(::, Method)))\
                         )                                                                \
                     )                                                                    \
@@ -212,7 +212,7 @@ namespace nvm
         {                                                                      \
             return m_mockState.is_mocked;                                      \
         }                                                                      \
-        void Setis_mocked(bool v)                                              \
+        void set_is_mocked(bool v)                                             \
         {                                                                      \
             m_mockState.is_mocked = v;                                         \
         }                                                                      \

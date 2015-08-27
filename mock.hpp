@@ -7,10 +7,12 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
 #ifndef NVM_MOCK_HPP
-#defineNVM_MOCK_HPP
+#define NVM_MOCK_HPP
 #pragma once
 
 #include "mock_base.hpp"
+#include "mockable.hpp"
+#include "detail/thread/once_block.hpp"
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/iteration/local.hpp>
@@ -57,7 +59,7 @@ namespace nvm
             
         virtual ~mock(){}
 
-        virtual boost::shared_ptr<boost::function_base> get_mocked_mem_fn(const std::string& signature) const
+        virtual boost::shared_ptr<boost::function_base> get_mock_mem_fn(const std::string& signature) const
         {
             boost::shared_ptr<mocker> pMocker = mock_base::get_mocker(signature);
             if (!pMocker)
@@ -101,7 +103,7 @@ namespace nvm
 
         virtual ~mock(){}
 
-        virtual boost::shared_ptr<boost::function_base> get_mocked_mem_fn(const std::string& signature) const
+        virtual boost::shared_ptr<boost::function_base> get_mock_mem_fn(const std::string& signature) const
         {
             boost::shared_ptr<mocker> pMocker = mock_base::get_mocker(signature);
             if (!pMocker)

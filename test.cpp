@@ -8,30 +8,7 @@
 //
 #include "mockable.hpp"
 #include "mock_base.hpp"
-#include "LegionUtility/Thread/OnceBlock.hpp"
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Anonymous Namespace
-//
-/////////////////////////////////////////////////////////////////////////////
-namespace 
-{
-
-}// Anonymous
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Class mockable Member Functions
-//
-/////////////////////////////////////////////////////////////////////////////
-namespace Legion
-{
-    namespace Test
-    {
-
-    }//! namespace Test;
-}//!namespace Legion'
+#include "detail/thread/once_block.hpp"
 
 namespace
 {
@@ -58,37 +35,37 @@ namespace
         }
     };
 
-    struct mockSomeTypeInheritsMockable : nvm::mock < SomeTypeInheritsMockable >
+    struct MockSomeTypeInheritsMockable : nvm::mock < SomeTypeInheritsMockable >
     {
-        mockSomeTypeInheritsMockable()
-            : mockMethodCalled(false)
-            , IsmockedCalled(false)
+        MockSomeTypeInheritsMockable()
+            : MockMethodCalled(false)
+            , IsMockedCalled(false)
         {
             NVM_ONCE_BLOCK()
             {
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, mockSomeTypeInheritsMockable, SomeMethod);
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, mockSomeTypeInheritsMockable, SomeMethod2);                
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, mockSomeTypeInheritsMockable, SomeMethod3);
+                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, MockSomeTypeInheritsMockable, SomeMethod);
+                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, MockSomeTypeInheritsMockable, SomeMethod2);                
+                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, MockSomeTypeInheritsMockable, SomeMethod3);
             }
         }
 
         void SomeMethod(int a, double b, float c) const
         {
-            TRACE("Called mockSomeMethod");
-            mockMethodCalled = true;
+            TRACE("Called MockSomeMethod");
+            MockMethodCalled = true;
         }
 
         MOCK_METHOD0(SomeMethod2, int());
         MOCK_METHOD0(SomeMethod3, int());
 
-        virtual bool Ismocked() const
+        virtual bool IsMocked() const
         {
-            IsmockedCalled = true;
+            IsMockedCalled = true;
             return true;
         }
 
-        mutable bool mockMethodCalled;
-        mutable bool IsmockedCalled;
+        mutable bool MockMethodCalled;
+        mutable bool IsMockedCalled;
     };
 
     void CallSomeMethod(SomeTypeInheritsMockable& t)
@@ -109,10 +86,10 @@ namespace
     TEST(mockTests, TestNonVirtualMethodmockInterceptionInherited)
     {
         using namespace ::testing;
-        mockSomeTypeInheritsMockable mst;
+        MockSomeTypeInheritsMockable mst;
         CallSomeMethod(mst);
-        EXPECT_TRUE(mst.mockMethodCalled);
-        EXPECT_TRUE(mst.IsmockedCalled);
+        EXPECT_TRUE(mst.MockMethodCalled);
+        EXPECT_TRUE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
         EXPECT_CALL(mst, SomeMethod2()).Times(1);
         EXPECT_EQ(CallSomeMethod2(mst), 42);
@@ -124,62 +101,62 @@ namespace
 
     //! This type implements mockable without using inheritance or virtuals. Best used
     //! in cases where no base type may be mockable.
-    struct SomeTypeImplementsmockable
+    struct SomeTypeImplementsMockable
     {
     protected:
         NVM_IMPLEMENT_MOCKABLE();
     public:
         void SomeMethod(int a, double b, float c)
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT(SomeTypeImplementsmockable::SomeMethod, a, b, c);
+            NVM_MOCK_NONVIRTUAL_INTERCEPT(SomeTypeImplementsMockable::SomeMethod, a, b, c);
             TRACE("Called SomeMethod");
         }
 
         int SomeMethod2()
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG(SomeTypeImplementsmockable::SomeMethod2, int());
+            NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG(SomeTypeImplementsMockable::SomeMethod2, int());
             TRACE("Called SomeMethod2");
             return -1;
         }
     };
 
-    struct mockSomeTypeImplementsmockable : nvm::mock < SomeTypeImplementsmockable >
+    struct MockSomeTypeImplementsMockable : nvm::mock < SomeTypeImplementsMockable >
     {
-        mockSomeTypeImplementsmockable()
-            : mockMethodCalled(false)
-            , IsmockedCalled(false)
+        MockSomeTypeImplementsMockable()
+            : MockMethodCalled(false)
+            , IsMockedCalled(false)
         {        
             NVM_ONCE_BLOCK()
             {
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeImplementsmockable, mockSomeTypeImplementsmockable, SomeMethod);
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeImplementsmockable, mockSomeTypeImplementsmockable, SomeMethod2);
+                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeImplementsMockable, MockSomeTypeImplementsMockable, SomeMethod);
+                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeImplementsMockable, MockSomeTypeImplementsMockable, SomeMethod2);
             }
         }
 
         void SomeMethod(int a, double b, float c)
         {
-            TRACE("Called mockSomeMethod");
-            mockMethodCalled = true;
+            TRACE("Called MockSomeMethod");
+            MockMethodCalled = true;
         }
 
         MOCK_METHOD0(SomeMethod2, int());
 
-        virtual bool Ismocked() const
+        virtual bool IsMocked() const
         {
-            IsmockedCalled = true;
+            IsMockedCalled = true;
             return true;
         }
 
-        bool mockMethodCalled;
-        mutable bool IsmockedCalled;
+        bool MockMethodCalled;
+        mutable bool IsMockedCalled;
     };
 
-    void CallSomeMethod(SomeTypeImplementsmockable& t)
+    void CallSomeMethod(SomeTypeImplementsMockable& t)
     {
         t.SomeMethod(1, 2, 3);
     }
 
-    int CallSomeMethod2(SomeTypeImplementsmockable& t)
+    int CallSomeMethod2(SomeTypeImplementsMockable& t)
     {
         return t.SomeMethod2();
     }
@@ -187,10 +164,10 @@ namespace
     TEST(mockTests, TestNonVirtualMethodmockInterceptionImplemented)
     {
         using namespace ::testing;
-        mockSomeTypeImplementsmockable mst;
+        MockSomeTypeImplementsMockable mst;
         CallSomeMethod(mst);
-        EXPECT_TRUE(mst.mockMethodCalled);
-        EXPECT_FALSE(mst.IsmockedCalled);
+        EXPECT_TRUE(mst.MockMethodCalled);
+        EXPECT_FALSE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
         EXPECT_CALL(mst, SomeMethod2()).Times(1);
         EXPECT_EQ(CallSomeMethod2(mst), 42);
@@ -213,35 +190,35 @@ namespace
         }
     };
 
-    struct mockAnotherTypeInheritsMockable : nvm::mock < AnotherTypeInheritsMockable >
+    struct MockAnotherTypeInheritsMockable : nvm::mock < AnotherTypeInheritsMockable >
     {
-        mockAnotherTypeInheritsMockable()
-            : mockMethodCalled(false)
-            , IsmockedCalled(false)
+        MockAnotherTypeInheritsMockable()
+            : MockMethodCalled(false)
+            , IsMockedCalled(false)
         {
             NVM_ONCE_BLOCK()
             {
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeInheritsMockable, mockAnotherTypeInheritsMockable, SomeMethod);
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeInheritsMockable, mockAnotherTypeInheritsMockable, SomeMethod2);
+                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeInheritsMockable, MockAnotherTypeInheritsMockable, SomeMethod);
+                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeInheritsMockable, MockAnotherTypeInheritsMockable, SomeMethod2);
             }
         }
 
         void SomeMethod(int a, double b, float c) const
         {
-            TRACE("Called AnotherTypeInheritsMockable::mockSomeMethod");
-            mockMethodCalled = true;
+            TRACE("Called AnotherTypeInheritsMockable::MockSomeMethod");
+            MockMethodCalled = true;
         }
 
         MOCK_METHOD0(SomeMethod2, int());
 
-        virtual bool Ismocked() const
+        virtual bool IsMocked() const
         {
-            IsmockedCalled = true;
+            IsMockedCalled = true;
             return true;
         }
 
-        mutable bool mockMethodCalled;
-        mutable bool IsmockedCalled;
+        mutable bool MockMethodCalled;
+        mutable bool IsMockedCalled;
     };
 
     void CallSomeMethod(AnotherTypeInheritsMockable& t)
@@ -254,88 +231,88 @@ namespace
         return t.SomeMethod2();
     }
     
-    TEST(mockTests, TestmockAnotherTypeInheritsMockable)
+    TEST(mockTests, TestMockAnotherTypeInheritsMockable)
     {
         using namespace ::testing;
-        mockAnotherTypeInheritsMockable mst;
+        MockAnotherTypeInheritsMockable mst;
         CallSomeMethod(mst);
-        EXPECT_TRUE(mst.mockMethodCalled);
-        EXPECT_TRUE(mst.IsmockedCalled);
+        EXPECT_TRUE(mst.MockMethodCalled);
+        EXPECT_TRUE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
         EXPECT_CALL(mst, SomeMethod2()).Times(1);
         EXPECT_EQ(CallSomeMethod2(mst), 42);
     }
 
     //! Test inheritence when two instance implement mockable rather than inherit.
-    struct AnotherTypeImplementsmockable : SomeTypeImplementsmockable
+    struct AnotherTypeImplementsMockable : SomeTypeImplementsMockable
     {
     protected:
         NVM_IMPLEMENT_MOCKABLE();
     public:
         void SomeMethod(int a, double b, float c)
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT(AnotherTypeImplementsmockable::SomeMethod, a, b, c);
+            NVM_MOCK_NONVIRTUAL_INTERCEPT(AnotherTypeImplementsMockable::SomeMethod, a, b, c);
             TRACE("Called SomeMethod");
         }
 
         int SomeMethod2()
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG(AnotherTypeImplementsmockable::SomeMethod2, int());
+            NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG(AnotherTypeImplementsMockable::SomeMethod2, int());
             TRACE("Called SomeMethod2");
             return -1;
         }
     };
 
-    struct mockAnotherTypeImplementsmockable : nvm::mock < AnotherTypeImplementsmockable >
+    struct MockAnotherTypeImplementsMockable : nvm::mock < AnotherTypeImplementsMockable >
     {
-        mockAnotherTypeImplementsmockable()
-            : mockMethodCalled(false)
-            , IsmockedCalled(false)
+        MockAnotherTypeImplementsMockable()
+            : MockMethodCalled(false)
+            , IsMockedCalled(false)
         {
             NVM_ONCE_BLOCK()
             {
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeImplementsmockable, mockAnotherTypeImplementsmockable, SomeMethod);
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeImplementsmockable, mockAnotherTypeImplementsmockable, SomeMethod2);
+                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeImplementsMockable, MockAnotherTypeImplementsMockable, SomeMethod);
+                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeImplementsMockable, MockAnotherTypeImplementsMockable, SomeMethod2);
             }
         }
 
         void SomeMethod(int a, double b, float c)
         {
-            TRACE("Called mockSomeMethod");
-            mockMethodCalled = true;
+            TRACE("Called MockSomeMethod");
+            MockMethodCalled = true;
         }
 
         MOCK_METHOD0(SomeMethod2, int());
 
-        virtual bool Ismocked() const
+        virtual bool IsMocked() const
         {
-            IsmockedCalled = true;
+            IsMockedCalled = true;
             return true;
         }
 
-        bool mockMethodCalled;
-        mutable bool IsmockedCalled;
+        bool MockMethodCalled;
+        mutable bool IsMockedCalled;
     };
 
-    void CallSomeMethod(AnotherTypeImplementsmockable& t)
+    void CallSomeMethod(AnotherTypeImplementsMockable& t)
     {
         t.SomeMethod(1, 2, 3);
     }
 
-    int CallSomeMethod2(AnotherTypeImplementsmockable& t)
+    int CallSomeMethod2(AnotherTypeImplementsMockable& t)
     {
         return t.SomeMethod2();
     }
 
-    TEST(mockTests, TestAnotherTypeImplementsmockable)
+    TEST(mockTests, TestAnotherTypeImplementsMockable)
     {
         using namespace ::testing;
         //! NOTE, only the most derived class will be mocked for non-virtuals in this case.
 
-        mockAnotherTypeImplementsmockable mst;
+        MockAnotherTypeImplementsMockable mst;
         CallSomeMethod(mst);
-        EXPECT_TRUE(mst.mockMethodCalled);
-        EXPECT_FALSE(mst.IsmockedCalled);
+        EXPECT_TRUE(mst.MockMethodCalled);
+        EXPECT_FALSE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
         EXPECT_CALL(mst, SomeMethod2()).Times(1);
         EXPECT_EQ(CallSomeMethod2(mst), 42);
@@ -368,16 +345,16 @@ namespace
         }
     };
 
-    struct mockSomeTypeWithOverloadsInheritsMockable : nvm::mock < SomeTypeWithOverloadsInheritsMockable >
+    struct MockSomeTypeWithOverloadsInheritsMockable : nvm::mock < SomeTypeWithOverloadsInheritsMockable >
     {
-        mockSomeTypeWithOverloadsInheritsMockable()
-            : IsmockedCalled(false)
+        MockSomeTypeWithOverloadsInheritsMockable()
+            : IsMockedCalled(false)
         {
             NVM_ONCE_BLOCK()
             {
-                NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_CONST_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, mockSomeTypeWithOverloadsInheritsMockable, SomeMethod, void(int, double, float));
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, mockSomeTypeWithOverloadsInheritsMockable, SomeMethod2);
-                NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, mockSomeTypeWithOverloadsInheritsMockable, SomeMethod, int());
+                NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_CONST_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, MockSomeTypeWithOverloadsInheritsMockable, SomeMethod, void(int, double, float));
+                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, MockSomeTypeWithOverloadsInheritsMockable, SomeMethod2);
+                NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, MockSomeTypeWithOverloadsInheritsMockable, SomeMethod, int());
             }
         }
         
@@ -385,13 +362,13 @@ namespace
         MOCK_METHOD0(SomeMethod, int());
         MOCK_METHOD0(SomeMethod2, int());
 
-        virtual bool Ismocked() const
+        virtual bool IsMocked() const
         {
-            IsmockedCalled = true;
+            IsMockedCalled = true;
             return true;
         }
 
-        mutable bool IsmockedCalled;
+        mutable bool IsMockedCalled;
     };
 
     int CallSomeMethod2(SomeTypeWithOverloadsInheritsMockable& st)
@@ -403,12 +380,12 @@ namespace
     {
         using namespace ::testing;
         
-        mockSomeTypeWithOverloadsInheritsMockable mst;
+        MockSomeTypeWithOverloadsInheritsMockable mst;
         SomeTypeWithOverloadsInheritsMockable& st = mst;
         
         EXPECT_CALL(mst, SomeMethod(_, _, _));
         st.SomeMethod(0, 5., 10.f);
-        EXPECT_TRUE(mst.IsmockedCalled);
+        EXPECT_TRUE(mst.IsMockedCalled);
         EXPECT_CALL(mst, SomeMethod()).WillOnce(Return(42));
         EXPECT_CALL(mst, SomeMethod2()).WillOnce(Return(24));
         EXPECT_EQ(st.SomeMethod(), 42);        

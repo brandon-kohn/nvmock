@@ -21,29 +21,29 @@
 
 namespace nvm
 {
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        //! \class mockable
-        //! \brief Inherit from this class to allow non-virtual member functions to be mockable.
-        //! This type can be used as a base type for classes and structs which have non-virtual
-        //! member functions which need to be mocked. See LegionUtility/Test/TestRunnerHook.cpp
-        //! for the example usage.
-        class mockable
-        {
-        public:
-            mockable(){}
-            virtual ~mockable(){}
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    //! \class mockable
+    //! \brief Inherit from this class to allow non-virtual member functions to be mockable.
+    //! This type can be used as a base type for classes and structs which have non-virtual
+    //! member functions which need to be mocked. See LegionUtility/Test/TestRunnerHook.cpp
+    //! for the example usage.
+    class mockable
+    {
+    public:
+        mockable(){}
+        virtual ~mockable(){}
 
-            virtual bool is_mocked() const { return false; }
-            virtual boost::shared_ptr<boost::function_base> get_mock_mem_fn(const std::string& signature) const { return boost::shared_ptr<boost::function_base>(); }
-        };
+        virtual bool is_mocked() const { return false; }
+        virtual boost::shared_ptr<boost::function_base> get_mock_mem_fn(const std::string& signature) const { return boost::shared_ptr<boost::function_base>(); }
+    };
 
-        template <typename MFN>
-        inline std::string get_mock_mem_fn_key(MFN, const std::string& methodName)
-        {
-            return methodName + typeid(MFN).name();
-        }
+    template <typename MFN>
+    inline std::string get_mock_mem_fn_key(MFN, const std::string& methodName)
+    {
+        return methodName + typeid(MFN).name();
     }
+    
 }//! namespace nvm;
 
 #if !defined(NVM_NO_NONVIRTUAL_MOCK_INTERCEPT)
@@ -67,7 +67,7 @@ namespace nvm
         if( is_mocked() )                                                                \
         {                                                                                \
             using namespace nvm;                                                         \
-            typedef SignatureOfMemberFunction<BOOST_TYPEOF(&Method)>::type sig_type;     \
+            typedef signature_of_mem_fn<BOOST_TYPEOF(&Method)>::type sig_type;           \
             boost::shared_ptr< boost::function<sig_type> > pMockFn =                     \
             boost::static_pointer_cast< boost::function<sig_type> >                      \
             (get_mock_mem_fn(get_mock_mem_fn_key(&Method                                 \

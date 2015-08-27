@@ -6,11 +6,11 @@
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
-#ifndef NVM_TEST_MOCKFUNCTIONFACTORY_HPP
-#define NVM_TEST_MOCKFUNCTIONFACTORY_HPP
+#ifndef NVM_MOCKFUNCTIONFACTORY_HPP
+#define NVM_MOCKFUNCTIONFACTORY_HPP
 #pragma once
 
 #include "detail/mock_function_factory.hpp"
 #include <boost/bind.hpp>
 
-#endif // NVM_TEST_MOCKFUNCTIONFACTORY_HPP
+#endif // NVM_MOCKFUNCTIONFACTORY_HPP

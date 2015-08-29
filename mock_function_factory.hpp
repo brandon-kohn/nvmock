@@ -10,7 +10,11 @@
 #define NVM_MOCKFUNCTIONFACTORY_HPP
 #pragma once
 
-#include "detail/mock_function_factory.hpp"
 #include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/function.hpp>
+#include "member_function_traits.hpp"
+#include "detail/mock_function_factory.hpp"
 
 #endif // NVM_MOCKFUNCTIONFACTORY_HPP

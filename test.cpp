@@ -94,9 +94,8 @@ namespace
     //! in cases where no base type may be mockable.
     struct SomeTypeImplementsMockable
     {
-    protected:
         NVM_IMPLEMENT_MOCKABLE();
-    public:
+
         void SomeMethod(int a, double b, float c)
         {
             NVM_MOCK_NONVIRTUAL_INTERCEPT(SomeTypeImplementsMockable::SomeMethod, a, b, c);
@@ -220,9 +219,8 @@ namespace
     //! Test inheritence when two instance implement mockable rather than inherit.
     struct AnotherTypeImplementsMockable : SomeTypeImplementsMockable
     {
-    protected:
         NVM_IMPLEMENT_MOCKABLE();
-    public:
+
         void SomeMethod(int a, double b, float c)
         {
             NVM_MOCK_NONVIRTUAL_INTERCEPT(AnotherTypeImplementsMockable::SomeMethod, a, b, c);

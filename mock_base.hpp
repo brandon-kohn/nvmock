@@ -10,8 +10,7 @@
 #define NVM_MOCKBASE_HPP
 #pragma once
 
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
+#include "mockable.hpp"
 #include <boost/function_types/function_arity.hpp>
 #include <boost/container/flat_map.hpp>
 
@@ -69,7 +68,7 @@ namespace nvm
         static void register_mocker(OriginalMFN o, MockMFN m, const std::string& mfName)
         {
 			mocker_map& s_mockers = get_mocker_map_instance();
-            s_mockers[get_mock_mem_fn_key(o, mfName)] = boost::make_shared<mocker_impl<T, OriginalMFN, MockMFN>>(o, m);
+            s_mockers[get_mock_mem_fn_key(o, mfName)] = boost::make_shared< mocker_impl<T, OriginalMFN, MockMFN> >(o, m);
         }
 
         template <typename OriginalMFN, typename MockMFN, typename T>
@@ -82,7 +81,7 @@ namespace nvm
 }//! namespace nvm;
 
 #define NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(OriginalType, MockType, MemberFn) \
-    register_mocker<MockType>(&OriginalType::MemberFn, &MockType::MemberFn, BOOST_PP_STRINGIZE(BOOST_PP_CAT(OriginalType, BOOST_PP_CAT(::, MemberFn))))\
+    register_mocker<MockType>(&OriginalType::MemberFn, &MockType::MemberFn, BOOST_PP_STRINGIZE(OriginalType::MemberFn))\
 /***/
 
 //! \def NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_MEMBER_FUNCTION
@@ -97,7 +96,7 @@ namespace nvm
     (                                                                                                                           \
         static_cast<nvm::mem_fn_ptr_gen<Signature>::template apply<OriginalType>::type>(&OriginalType::MemberFn)                \
       , static_cast<nvm::mem_fn_ptr_gen<Signature>::template apply<MockType>::type>(&MockType::MemberFn)                        \
-      , BOOST_PP_STRINGIZE(BOOST_PP_CAT(OriginalType, BOOST_PP_CAT(::, MemberFn)))                                              \
+      , BOOST_PP_STRINGIZE(OriginalType::MemberFn)                                                                              \
     )                                                                                                                           \
 /***/
 
@@ -113,7 +112,7 @@ namespace nvm
     (                                                                                                                           \
         static_cast<nvm::mem_fn_ptr_gen<Signature>::template apply<OriginalType>::const_type>(&OriginalType::MemberFn)          \
       , static_cast<nvm::mem_fn_ptr_gen<Signature>::template apply<MockType>::const_type>(&MockType::MemberFn)                  \
-      , BOOST_PP_STRINGIZE(BOOST_PP_CAT(OriginalType, BOOST_PP_CAT(::, MemberFn)))                                              \
+      , BOOST_PP_STRINGIZE(OriginalType::MemberFn)                                                                              \
     )                                                                                                                           \
 /***/
 

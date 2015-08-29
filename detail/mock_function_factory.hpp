@@ -62,7 +62,7 @@ struct mock_function_factory<n>                                                 
     template <typename OriginalMFN, typename MockMFN, typename T>                                    \
     static boost::shared_ptr<boost::function_base> create(OriginalMFN opMFN, MockMFN mpMFN, T* pThis)\
     {                                                                                                \
-        typedef signature_of_mem_fn<OriginalMFN>::type sig_type;                                     \
+        typedef typename signature_of_mem_fn<OriginalMFN>::type sig_type;                            \
         boost::shared_ptr<boost::function_base> pFn = boost::make_shared<boost::function<sig_type> > \
         (boost::bind(mpMFN, pThis BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) NVM_ENUM_BIND_ARGS(BOOST_PP_DEC(n)))); \
         return pFn;                                                                                  \

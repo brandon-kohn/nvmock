@@ -10,10 +10,8 @@
 #define NVM_MOCKABLE_HPP
 #pragma once
 
-#include "member_function_traits.hpp"
 #include "mock_function_factory.hpp"
 
-#include <boost/function.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/preprocessor/empty.hpp>
@@ -136,7 +134,7 @@ namespace nvm
                         get_mock_mem_fn_key                                              \
                         (                                                                \
                             mem_fn_ptr_gen<Sig>::template apply<T>::type()               \
-                          , BOOST_PP_STRINGIZE(BOOST_PP_CAT(T, BOOST_PP_CAT(::, Method)))\
+                          , BOOST_PP_STRINGIZE(T::Method)                                \
                         )                                                                \
                     )                                                                    \
                 );                                                                       \
@@ -174,7 +172,7 @@ namespace nvm
                         get_mock_mem_fn_key                                              \
                         (                                                                \
                             mem_fn_ptr_gen<Sig>::template apply<T>::const_type()         \
-                          , BOOST_PP_STRINGIZE(BOOST_PP_CAT(T, BOOST_PP_CAT(::, Method)))\
+                          , BOOST_PP_STRINGIZE(T::Method)                                \
                         )                                                                \
                     )                                                                    \
                 );                                                                       \

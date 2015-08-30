@@ -40,9 +40,9 @@ namespace
         {
             NVM_ONCE_BLOCK()
             {
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, MockSomeTypeInheritsMockable, SomeMethod);
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, MockSomeTypeInheritsMockable, SomeMethod2);                
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, MockSomeTypeInheritsMockable, SomeMethod3);
+                NVM_REGISTER_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, MockSomeTypeInheritsMockable, SomeMethod);
+                NVM_REGISTER_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, MockSomeTypeInheritsMockable, SomeMethod2);                
+                NVM_REGISTER_MOCK_MEMBER_FUNCTION(SomeTypeInheritsMockable, MockSomeTypeInheritsMockable, SomeMethod3);
             }
         }
 
@@ -115,8 +115,8 @@ namespace
         {        
             NVM_ONCE_BLOCK()
             {
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeImplementsMockable, MockSomeTypeImplementsMockable, SomeMethod);
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeImplementsMockable, MockSomeTypeImplementsMockable, SomeMethod2);
+                NVM_REGISTER_MOCK_MEMBER_FUNCTION(SomeTypeImplementsMockable, MockSomeTypeImplementsMockable, SomeMethod);
+                NVM_REGISTER_MOCK_MEMBER_FUNCTION(SomeTypeImplementsMockable, MockSomeTypeImplementsMockable, SomeMethod2);
             }
         }
 
@@ -176,8 +176,8 @@ namespace
         {
             NVM_ONCE_BLOCK()
             {
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeInheritsMockable, MockAnotherTypeInheritsMockable, SomeMethod);
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeInheritsMockable, MockAnotherTypeInheritsMockable, SomeMethod2);
+                NVM_REGISTER_MOCK_MEMBER_FUNCTION(AnotherTypeInheritsMockable, MockAnotherTypeInheritsMockable, SomeMethod);
+                NVM_REGISTER_MOCK_MEMBER_FUNCTION(AnotherTypeInheritsMockable, MockAnotherTypeInheritsMockable, SomeMethod2);
             }
         }
 
@@ -240,8 +240,8 @@ namespace
         {
             NVM_ONCE_BLOCK()
             {
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeImplementsMockable, MockAnotherTypeImplementsMockable, SomeMethod);
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(AnotherTypeImplementsMockable, MockAnotherTypeImplementsMockable, SomeMethod2);
+                NVM_REGISTER_MOCK_MEMBER_FUNCTION(AnotherTypeImplementsMockable, MockAnotherTypeImplementsMockable, SomeMethod);
+                NVM_REGISTER_MOCK_MEMBER_FUNCTION(AnotherTypeImplementsMockable, MockAnotherTypeImplementsMockable, SomeMethod2);
             }
         }
 
@@ -313,9 +313,9 @@ namespace
         {
             NVM_ONCE_BLOCK()
             {
-                NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_CONST_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, MockSomeTypeWithOverloadsInheritsMockable, SomeMethod, void(int, double, float));
-                NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, MockSomeTypeWithOverloadsInheritsMockable, SomeMethod2);
-                NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, MockSomeTypeWithOverloadsInheritsMockable, SomeMethod, int());
+                NVM_REGISTER_MOCK_OVERLOADED_CONST_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, MockSomeTypeWithOverloadsInheritsMockable, SomeMethod, void(int, double, float));
+                NVM_REGISTER_MOCK_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, MockSomeTypeWithOverloadsInheritsMockable, SomeMethod2);
+                NVM_REGISTER_MOCK_OVERLOADED_MEMBER_FUNCTION(SomeTypeWithOverloadsInheritsMockable, MockSomeTypeWithOverloadsInheritsMockable, SomeMethod, int());
             }
         }
         

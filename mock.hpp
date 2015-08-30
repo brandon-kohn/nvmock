@@ -58,6 +58,8 @@ namespace nvm
 #endif//Use old preprocessor if no variadic templates.
             
         virtual ~mock(){}
+		
+		bool is_mocked() const { return true; }
 
         virtual boost::shared_ptr<boost::function_base> get_mock_mem_fn(const std::string& signature) const
         {

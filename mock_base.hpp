@@ -80,18 +80,18 @@ namespace nvm
 
 }//! namespace nvm;
 
-#define NVM_REGISTER_NONVIRTUAL_MOCK_MEMBER_FUNCTION(OriginalType, MockType, MemberFn) \
+#define NVM_REGISTER_MOCK_MEMBER_FUNCTION(OriginalType, MockType, MemberFn) \
     register_mocker<MockType>(&OriginalType::MemberFn, &MockType::MemberFn, BOOST_PP_STRINGIZE(OriginalType::MemberFn))\
 /***/
 
-//! \def NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_MEMBER_FUNCTION
+//! \def NVM_REGISTER_MOCK_OVERLOADED_MEMBER_FUNCTION
 //! \brief This macros is to be used in the case of overloaded member functions.
 //! Example usage:
 //! \code
-//! NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_MEMBER_FUNCTION(A, MockA, OverloadedFn, void(int, double));
-//! NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_MEMBER_FUNCTION(A, MockA, OverloadedFn, bool(char, double));
+//! NVM_REGISTER_MOCK_OVERLOADED_MEMBER_FUNCTION(A, MockA, OverloadedFn, void(int, double));
+//! NVM_REGISTER_MOCK_OVERLOADED_MEMBER_FUNCTION(A, MockA, OverloadedFn, bool(char, double));
 //! \endcode
-#define NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_MEMBER_FUNCTION(OriginalType, MockType, MemberFn, Signature)                    \
+#define NVM_REGISTER_MOCK_OVERLOADED_MEMBER_FUNCTION(OriginalType, MockType, MemberFn, Signature)                               \
     register_mocker<MockType>                                                                                                   \
     (                                                                                                                           \
         static_cast<nvm::mem_fn_ptr_gen<Signature>::template apply<OriginalType>::type>(&OriginalType::MemberFn)                \
@@ -100,14 +100,14 @@ namespace nvm
     )                                                                                                                           \
 /***/
 
-//! \def NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_MEMBER_FUNCTION
+//! \def NVM_REGISTER_MOCK_OVERLOADED_MEMBER_FUNCTION
 //! \brief This macros is to be used in the case of overloaded member functions.
 //! Example usage:
 //! \code
-//! NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_MEMBER_FUNCTION(A, MockA, OverloadedFn, void(int, double));
-//! NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_MEMBER_FUNCTION(A, MockA, OverloadedFn, bool(char, double));
+//! NVM_REGISTER_MOCK_OVERLOADED_MEMBER_FUNCTION(A, MockA, OverloadedFn, void(int, double));
+//! NVM_REGISTER_MOCK_OVERLOADED_MEMBER_FUNCTION(A, MockA, OverloadedFn, bool(char, double));
 //! \endcode
-#define NVM_REGISTER_NONVIRTUAL_MOCK_OVERLOADED_CONST_MEMBER_FUNCTION(OriginalType, MockType, MemberFn, Signature)              \
+#define NVM_REGISTER_MOCK_OVERLOADED_CONST_MEMBER_FUNCTION(OriginalType, MockType, MemberFn, Signature)                         \
     register_mocker<MockType>                                                                                                   \
     (                                                                                                                           \
         static_cast<nvm::mem_fn_ptr_gen<Signature>::template apply<OriginalType>::const_type>(&OriginalType::MemberFn)          \

@@ -6,7 +6,7 @@
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
-#include "mock.hpp"
+#include <nvmock/mock.hpp>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -17,18 +17,18 @@ namespace
     {
         void SomeMethod(int a, double b, float c) const
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT(SomeTypeInheritsMockable::SomeMethod, a, b, c);
+            NVM_MOCK_INTERCEPT(SomeTypeInheritsMockable::SomeMethod, a, b, c);
         }
 
         int SomeMethod2()
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT(SomeTypeInheritsMockable::SomeMethod2);
+            NVM_MOCK_INTERCEPT(SomeTypeInheritsMockable::SomeMethod2);
             return -1;
         }
 
         int SomeMethod3()
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT(SomeTypeInheritsMockable::SomeMethod3);
+            NVM_MOCK_INTERCEPT(SomeTypeInheritsMockable::SomeMethod3);
             return -2;
         }
     };
@@ -98,12 +98,12 @@ namespace
 
         void SomeMethod(int a, double b, float c)
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT(SomeTypeImplementsMockable::SomeMethod, a, b, c);
+            NVM_MOCK_INTERCEPT(SomeTypeImplementsMockable::SomeMethod, a, b, c);
         }
 
         int SomeMethod2()
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG(SomeTypeImplementsMockable::SomeMethod2, int());
+            NVM_MOCK_INTERCEPT_SIG(SomeTypeImplementsMockable::SomeMethod2, int());
             return -1;
         }
     };
@@ -159,12 +159,12 @@ namespace
     {
         void SomeMethod(int a, double b, float c) const
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT(AnotherTypeInheritsMockable::SomeMethod, a, b, c);
+            NVM_MOCK_INTERCEPT(AnotherTypeInheritsMockable::SomeMethod, a, b, c);
         }
 
         int SomeMethod2()
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT(AnotherTypeInheritsMockable::SomeMethod2);
+            NVM_MOCK_INTERCEPT(AnotherTypeInheritsMockable::SomeMethod2);
             return -1;
         }
     };
@@ -223,12 +223,12 @@ namespace
 
         void SomeMethod(int a, double b, float c)
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT(AnotherTypeImplementsMockable::SomeMethod, a, b, c);
+            NVM_MOCK_INTERCEPT(AnotherTypeImplementsMockable::SomeMethod, a, b, c);
         }
 
         int SomeMethod2()
         {
-            NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG(AnotherTypeImplementsMockable::SomeMethod2, int());
+            NVM_MOCK_INTERCEPT_SIG(AnotherTypeImplementsMockable::SomeMethod2, int());
             return -1;
         }
     };
@@ -290,18 +290,18 @@ namespace
     {
         void SomeMethod(int a, double b, float c) const
         {
-            NVM_MOCK_NONVIRTUAL_OVERLOAD_CONST_INTERCEPT(SomeTypeWithOverloadsInheritsMockable, SomeMethod, void(int, double, float), a, b, c);
+            NVM_MOCK_OVERLOAD_CONST_INTERCEPT(SomeTypeWithOverloadsInheritsMockable, SomeMethod, void(int, double, float), a, b, c);
         }
 
         int SomeMethod()
         {
-            NVM_MOCK_NONVIRTUAL_OVERLOAD_INTERCEPT(SomeTypeWithOverloadsInheritsMockable, SomeMethod, int());
+            NVM_MOCK_OVERLOAD_INTERCEPT(SomeTypeWithOverloadsInheritsMockable, SomeMethod, int());
             return -1;
         }
 
         int SomeMethod2()
         {
-            NVM_MOCK_NONVIRTUAL_OVERLOAD_INTERCEPT(SomeTypeWithOverloadsInheritsMockable, SomeMethod2, int());
+            NVM_MOCK_OVERLOAD_INTERCEPT(SomeTypeWithOverloadsInheritsMockable, SomeMethod2, int());
             return -1;
         }
     };

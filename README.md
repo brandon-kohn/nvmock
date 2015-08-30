@@ -1,4 +1,4 @@
-## NVM: Non-virtual Mock Member Functions}
+## NVM: Non-virtual Mock Member Functions
 
 So you're interested in using mocks for your C++ project. Then you find out that in order to mock your favorite type, you need to alter the interface in order to mock member functions which are not virtual. While it may make sense in many cases to refactor into an abstract interface and mock that, it's not always reasonable or even possible. Sometimes you just want to keep a member function non-virtual and be able to mock it.
 

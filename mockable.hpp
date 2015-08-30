@@ -24,7 +24,7 @@ namespace nvm
     //! \class mockable
     //! \brief Inherit from this class to allow non-virtual member functions to be mockable.
     //! This type can be used as a base type for classes and structs which have non-virtual
-    //! member functions which need to be mocked. See LegionUtility/Test/TestRunnerHook.cpp
+    //! member functions which need to be mocked.
     //! for the example usage.
     class mockable
     {
@@ -45,7 +45,7 @@ namespace nvm
 }//! namespace nvm;
 
 #if !defined(NVM_NO_NONVIRTUAL_MOCK_INTERCEPT)
-    //! \def NVM_MOCK_NONVIRTUAL_INTERCEPT( Method, ... )
+    //! \def NVM_MOCK_INTERCEPT( Method, ... )
     //! \brief Macro to implement a non-virtual mock function intercept.
     //!
     //! Preconditions:
@@ -57,11 +57,11 @@ namespace nvm
     //! \code
     //! bool MyClass::MemberFunction(int a, double b)
     //! {
-    //!     NVM_MOCK_NONVIRTUAL_INTERCEPT(MyClass::MemberFunction, a, b);
+    //!     NVM_MOCK_INTERCEPT(MyClass::MemberFunction, a, b);
     //!     return a < b;
     //! }
     //! \endcode
-    #define NVM_MOCK_NONVIRTUAL_INTERCEPT(Method, ...)                                   \
+    #define NVM_MOCK_INTERCEPT(Method, ...)                                              \
         if( is_mocked() )                                                                \
         {                                                                                \
             using namespace nvm;                                                         \
@@ -74,7 +74,7 @@ namespace nvm
                 return (*pMockFn)(__VA_ARGS__);                                          \
         }                                                                                \
     /***/
-    //! \def NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG( Method, Signature, ... )
+    //! \def NVM_MOCK_INTERCEPT_SIG( Method, Signature, ... )
     //! \brief Macro to implement a non-virtual mock function intercept.
     //! This signature version can be used in cases when the boost::function facility
     //! fails to deduce the signature automatically.
@@ -88,11 +88,11 @@ namespace nvm
     //! \code
     //! bool MyClass::MemberFunction(int a, double b)
     //! {
-    //!     NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG(MyClass::MemberFunction, bool(int, double), a, b);
+    //!     NVM_MOCK_INTERCEPT_SIG(MyClass::MemberFunction, bool(int, double), a, b);
     //!     return a < b;
     //! }
     //! \endcode
-    #define NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG(Method, Signature, ...)                    \
+    #define NVM_MOCK_INTERCEPT_SIG(Method, Signature, ...)                               \
         if( is_mocked() )                                                                \
         {                                                                                \
             using namespace nvm;                                                         \
@@ -104,7 +104,7 @@ namespace nvm
                 return (*pMockFn)(__VA_ARGS__);                                          \
         }                                                                                \
     /***/
-    //! \def NVM_MOCK_NONVIRTUAL_OVERLOAD_INTERCEPT( Type, Method, Signature, ... )
+    //! \def NVM_MOCK_OVERLOAD_INTERCEPT( Type, Method, Signature, ... )
     //! \brief Macro to implement a non-virtual mock function intercept for overloaded non-const member functions.
     //!
     //! Preconditions:
@@ -118,11 +118,11 @@ namespace nvm
     //! \code
     //! bool MyClass::MemberFunction(int a, double b)
     //! {
-    //!     NVM_MOCK_NONVIRTUAL_OVERLOAD_INTERCEPT(MyClass, MemberFunction, bool(int, double), a, b);
+    //!     NVM_MOCK_OVERLOAD_INTERCEPT(MyClass, MemberFunction, bool(int, double), a, b);
     //!     return a < b;
     //! }
     //! \endcode
-    #define NVM_MOCK_NONVIRTUAL_OVERLOAD_INTERCEPT(T, Method, Sig, ...)                  \
+    #define NVM_MOCK_OVERLOAD_INTERCEPT(T, Method, Sig, ...)                             \
         if (is_mocked())                                                                 \
         {                                                                                \
             using namespace nvm;                                                         \
@@ -142,7 +142,7 @@ namespace nvm
                 return (*pMockFn)(__VA_ARGS__);                                          \
         }                                                                                \
     /***/
-    //! \def NVM_MOCK_NONVIRTUAL_OVERLOAD_CONST_INTERCEPT( Type, Method, Signature, ... )
+    //! \def NVM_MOCK_OVERLOAD_CONST_INTERCEPT( Type, Method, Signature, ... )
     //! \brief Macro to implement a non-virtual mock function intercept for overloaded const member functions.
     //!
     //! Preconditions:
@@ -156,11 +156,11 @@ namespace nvm
     //! \code
     //! bool MyClass::MemberFunction(int a, double b) const
     //! {
-    //!     NVM_MOCK_NONVIRTUAL_OVERLOAD_CONST_INTERCEPT(MyClass, MemberFunction, bool(int, double), a, b);
+    //!     NVM_MOCK_OVERLOAD_CONST_INTERCEPT(MyClass, MemberFunction, bool(int, double), a, b);
     //!     return a < b;
     //! }
     //! \endcode
-    #define NVM_MOCK_NONVIRTUAL_OVERLOAD_CONST_INTERCEPT(T, Method, Sig, ...)            \
+    #define NVM_MOCK_OVERLOAD_CONST_INTERCEPT(T, Method, Sig, ...)                       \
         if (is_mocked())                                                                 \
         {                                                                                \
             using namespace nvm;                                                         \
@@ -193,7 +193,7 @@ namespace nvm
     //! public:
     //!     MyClass();
     //!     ~MyClass();
-    //! protected:
+    //! 
     //!     NVM_IMPLEMENT_MOCKABLE();
     //! };
     //! \endcode
@@ -201,28 +201,26 @@ namespace nvm
         typedef void ImplementsMockable;                                       \
         struct mockable                                                        \
         {                                                                      \
-            mockable()                                                         \
-            : is_mocked(false)                                                 \
-            {}                                                                 \
+            mockable() : is_mocked(false) {}                                   \
             bool is_mocked;                                                    \
-        } m_mockState;                                                         \
+        } BOOST_PP_CAT(m_mockState, __LINE__);                                 \
         bool is_mocked() const                                                 \
         {                                                                      \
-            return m_mockState.is_mocked;                                      \
+            return BOOST_PP_CAT(m_mockState, __LINE__).is_mocked;              \
         }                                                                      \
         void set_is_mocked(bool v)                                             \
         {                                                                      \
-            m_mockState.is_mocked = v;                                         \
+            BOOST_PP_CAT(m_mockState, __LINE__).is_mocked = v;                 \
         }                                                                      \
         virtual boost::shared_ptr<boost::function_base> get_mock_mem_fn        \
         (const std::string& signature) const                                   \
         { return boost::shared_ptr<boost::function_base>(); }                  \
     /***/
 #else
-    #define NVM_MOCK_NONVIRTUAL_INTERCEPT(Method, Signature, ...)
-    #define NVM_MOCK_NONVIRTUAL_INTERCEPT_SIG(Method, Signature, ...)  
-    #define NVM_MOCK_NONVIRTUAL_OVERLOAD_INTERCEPT(T, Method, Sig, ...)  
-    #define NVM_MOCK_NONVIRTUAL_OVERLOAD_CONST_INTERCEPT(T, Method, Sig, ...) 
+    #define NVM_MOCK_INTERCEPT(Method, Signature, ...)
+    #define NVM_MOCK_INTERCEPT_SIG(Method, Signature, ...)  
+    #define NVM_MOCK_OVERLOAD_INTERCEPT(T, Method, Sig, ...)  
+    #define NVM_MOCK_OVERLOAD_CONST_INTERCEPT(T, Method, Sig, ...) 
     #define NVM_IMPLEMENT_MOCKABLE()
 #endif
 

@@ -1,0 +1,24 @@
+# bring in rules for testing
+import testing ;
+
+# Define the build paths
+import path ;
+
+# Store the root directory for the Legion code.
+path-constant LEGION_THIRD_PARTY : "../Legion/Trunk/Legion Third Party" ;
+
+# Project declaration
+project nvm
+    : requirements
+      <include>"../Legion/Trunk/Legion Third Party/Include"
+	  <include>..
+      <address-model>32:<library-path>"$(LEGION_THIRD_PARTY)/Lib_Win32"
+	  <address-model>64:<library-path>"$(LEGION_THIRD_PARTY)/Lib_x64"
+    ;
+
+test-suite "nvm" 
+    :
+      [ run test/test.cpp ] 
+	  [ run example/implements_mockable.cpp ] 
+	  [ run example/inherits_mockable.cpp ] 
+    ; 

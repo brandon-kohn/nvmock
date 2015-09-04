@@ -11,22 +11,21 @@
 #pragma once
 
 #include <boost/preprocessor/cat.hpp>
-#include <boost/atomic.hpp>
 
 #ifndef NVM_NO_CXX11_THREAD_SAFE_STATIC_LOCAL_VARIABLES
-
+#include <atomic>
 //! \def NVM_ONCE_BLOCK()
 //! \brief This macro can be used to define the entry to a block which will only be run once even in the context of multiple threads.
 #define NVM_ONCE_BLOCK()                                                             \
-    static boost::atomic<bool> BOOST_PP_CAT(nvm_once_block_sentinel,__LINE__)(false);\
+    static std::atomic<bool> BOOST_PP_CAT(nvm_once_block_sentinel,__LINE__)(false);  \
     bool BOOST_PP_CAT(nvm_once_block_expected,__LINE__) = false;                     \
     if(BOOST_PP_CAT(nvm_once_block_sentinel,__LINE__).compare_exchange_strong(       \
                                    BOOST_PP_CAT(nvm_once_block_expected,__LINE__)    \
-                                 , true, boost::memory_order_seq_cst))               \
+                                 , true, std::memory_order_seq_cst))                 \
 /***/
 
 #else
-
+#include <boost/atomic.hpp>
 #include <boost/thread/once.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/ref.hpp>

@@ -78,7 +78,7 @@ struct MockSomeTypeImplementsMockable : nvm::mock < SomeTypeImplementsMockable >
         }
     }
 
-    MOCK_CONST_METHOD3(SomeMethod, void(int a, double b, float c));
+    MOCK_METHOD3(SomeMethod, void(int a, double b, float c));
     MOCK_METHOD0(SomeMethodWhichReturns, int());
     MOCK_CONST_METHOD3(SomeOverloadedMethod, void(int, double, float));
     MOCK_METHOD1(SomeOverloadedMethod, int(char));

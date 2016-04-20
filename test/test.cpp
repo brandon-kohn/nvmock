@@ -36,7 +36,7 @@ namespace
     struct MockSomeTypeInheritsMockable : nvm::mock < SomeTypeInheritsMockable >
     {
         MockSomeTypeInheritsMockable()
-            : IsMockedCalled(false)
+        : IsMockedCalled(false)
         {
             NVM_ONCE_BLOCK()
             {
@@ -78,7 +78,7 @@ namespace
     {
         using namespace ::testing;
         MockSomeTypeInheritsMockable mst;
-		EXPECT_CALL(mst, SomeMethod(_,_,_));
+        EXPECT_CALL(mst, SomeMethod(_,_,_));
         CallSomeMethod(mst);
         EXPECT_TRUE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
@@ -111,7 +111,7 @@ namespace
     struct MockSomeTypeImplementsMockable : nvm::mock < SomeTypeImplementsMockable >
     {
         MockSomeTypeImplementsMockable()
-            : IsMockedCalled(false)
+        : IsMockedCalled(false)
         {        
             NVM_ONCE_BLOCK()
             {
@@ -146,7 +146,7 @@ namespace
     {
         using namespace ::testing;
         MockSomeTypeImplementsMockable mst;
-		EXPECT_CALL(mst, SomeMethod(_,_,_));
+        EXPECT_CALL(mst, SomeMethod(_,_,_));
         CallSomeMethod(mst);
         EXPECT_FALSE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
@@ -172,7 +172,7 @@ namespace
     struct MockAnotherTypeInheritsMockable : nvm::mock < AnotherTypeInheritsMockable >
     {
         MockAnotherTypeInheritsMockable()
-            : IsMockedCalled(false)
+        : IsMockedCalled(false)
         {
             NVM_ONCE_BLOCK()
             {
@@ -208,7 +208,7 @@ namespace
     {
         using namespace ::testing;
         MockAnotherTypeInheritsMockable mst;
-		EXPECT_CALL(mst, SomeMethod(_,_,_));
+        EXPECT_CALL(mst, SomeMethod(_,_,_));
         CallSomeMethod(mst);
         EXPECT_TRUE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
@@ -236,7 +236,7 @@ namespace
     struct MockAnotherTypeImplementsMockable : nvm::mock < AnotherTypeImplementsMockable >
     {
         MockAnotherTypeImplementsMockable()
-            : IsMockedCalled(false)
+        : IsMockedCalled(false)
         {
             NVM_ONCE_BLOCK()
             {
@@ -274,7 +274,7 @@ namespace
         //! NOTE, only the most derived class will be mocked for non-virtuals in this case.
 
         MockAnotherTypeImplementsMockable mst;
-		EXPECT_CALL(mst, SomeMethod(_,_,_));
+        EXPECT_CALL(mst, SomeMethod(_,_,_));
         CallSomeMethod(mst);
         EXPECT_FALSE(mst.IsMockedCalled);
         ON_CALL(mst, SomeMethod2()).WillByDefault(Return(42));
@@ -309,7 +309,7 @@ namespace
     struct MockSomeTypeWithOverloadsInheritsMockable : nvm::mock < SomeTypeWithOverloadsInheritsMockable >
     {
         MockSomeTypeWithOverloadsInheritsMockable()
-            : IsMockedCalled(false)
+        : IsMockedCalled(false)
         {
             NVM_ONCE_BLOCK()
             {
